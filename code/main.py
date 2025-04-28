@@ -1,4 +1,7 @@
 import pygame
+
+from pygame.image import load
+
 from settings import *
 
 from editor import Editor
@@ -10,6 +13,11 @@ class Main:
         self.clock = pygame.time.Clock()
 
         self.editor = Editor()
+
+        # инициализация курсора
+        surf = load(CURSOR_PATH).convert_alpha()
+        cursor = pygame.cursors.Cursor((0,0), surf)
+        pygame.mouse.set_cursor(cursor)
 
     def run(self):
         while True:  # запускаем игру и обновляем ее
