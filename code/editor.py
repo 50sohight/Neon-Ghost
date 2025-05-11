@@ -3,6 +3,7 @@ from pygame.math import Vector2 as vector
 from pygame.mouse import get_pressed as mouse_buttons
 from pygame.mouse import get_pos as mouse_pos
 from settings import *
+from menu import Menu
 
 class Editor:
     def __init__(self):
@@ -19,6 +20,12 @@ class Editor:
         self.support_line_surf.set_colorkey('green')
         self.support_line_surf.set_alpha(30)
 
+        # выбор
+        self.selection_index = 2
+
+        # меню
+        self.menu = Menu()
+
     # ввод
     def event_loop(self): # цикл событий
         for event in pygame.event.get():
@@ -26,6 +33,8 @@ class Editor:
                 pygame.quit()
                 sys.exit()
             self.pan_input(event)
+            self.selection_hotkeys(event)
+            self.menu_click(event)
 
     def pan_input(self, event):
         # проверка нажатия на среднюю кнопку мыши
@@ -49,6 +58,17 @@ class Editor:
         # сдвиг камеры
         if self.pan_active:
             self.origin = vector(mouse_pos()) - self.pan_offset
+
+    def selection_hotkeys(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT and self.selection_index < RIGHT_VALUE_EDITOR_DATA:
+                self.selection_index +=1
+            elif event.key == pygame.K_LEFT and self.selection_index > LEFT_VALUE_EDITOR_DATA:
+                self.selection_index -= 1
+
+    def menu_click(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and self.menu.rect.collidepoint(mouse_pos()):
+            self.selection_index = self.menu.click(mouse_pos(), mouse_buttons())
     # рисование
     def draw_tile_lines(self):
         cols = WINDOW_WIDTH // TILE_SIZE
@@ -73,7 +93,7 @@ class Editor:
         self.event_loop()
 
         # рисование
-        self.display_surface.fill('white')
+        self.display_surface.fill('gray')
         self.draw_tile_lines()
         pygame.draw.circle(self.display_surface, 'red', self.origin, 10)
-
+        self.menu.display(self.selection_index)
