@@ -5,7 +5,7 @@ WINDOW_HEIGHT = 720
 ANIMATION_SPEED = 8
 
 # тестовые значения
-LEFT_VALUE_EDITOR_DATA = 1
+LEFT_VALUE_EDITOR_DATA = 2
 RIGHT_VALUE_EDITOR_DATA = 18
 EDITOR_DATA = {
     0: {'style': 'player', 'type': 'object', 'menu': None, 'menu_surf': None, 'preview': None,
